@@ -2,7 +2,30 @@
 //Runs the shell in interactive mode.
 void interactive()
 {
+	char *read; // string from input
+	char *semicolon;//strtok var
+	int exitstatus = 1;//checks if the user has told the program to exit
 	
+	while(exitstatus)
+	{
+		printf("Command(s): ");
+		//fgets(read,100,stdin);//reads commands
+		
+		/*semicolon = strtok(read,"[;]\n");//checks for semicolons within each line read from the file
+		
+		while (semicolon != NULL)//while there are semicolons in the string left
+		{
+			if(strcmp(semicolon,"exit"))//if the command is 'exit'
+			{
+				exitstatus = 0;//tells program to exit after the current line
+			}
+			execute(semicolon);//give the command and flags to the execute command
+			semicolon = strtok(NULL,"[; ]\n");
+		}*/
+		
+		
+		
+	}
 	return;
 }
 //Runs the shell in Batch mode
@@ -33,14 +56,11 @@ void batch()
 		
 		while (semicolon != NULL)//while there are semicolons in the string left
 		{
-			execute(semicolon);
+			execute(semicolon);//give the command and flags to the execute command
 			semicolon = strtok(NULL,"[; ]\n");
 		}
 		
 	}
-	
-	
-
 	
 	fclose(fstream); // close file
 	return;
@@ -49,10 +69,11 @@ void batch()
 void execute(char *command)
 {
 	
-	int counter = 0;
-	char *flags[] = {};
-	char *split;
-	int last;
+	int counter = 0;//checks the number of args passed to the function
+	char *flags[100];//
+	char *split = NULL;//strtok var
+	int last;//holds the last arg position
+	
 	
 	printf("\nExecuting %s \n", command);
 	
@@ -60,27 +81,25 @@ void execute(char *command)
 	if(fork() == 0)//creates a child process
 	{
 		
-		split = strtok(command, "[ ]"); // searches the commands for flags
-		while (split != NULL)// while there are flags
+		split = strtok(command, " "); // searches the commands for flags
+		while (split != NULL)
 		{
-			
-			flags[counter] = realloc(flags[counter], sizeof(char)* strlen(split));//allocates memory for each flag
-			strcpy(flags[counter],split);
+			flags[counter]= split;
 			counter++;
 			split = strtok(NULL, " ");//checks for remaining spaces.
 			
 		}
 		
+	
 		last = counter++;
 		flags[last] = NULL; //sets null terminating character
-		//printf("The flag is %s\n", flags[counter]);
-		execvp(flags[0], flags);
+		execvp(flags[0], flags);//calls the command
 		printf("EXECVP failed\n");//if the process could not be called, terminate child
 		exit(getpid());
 	}
 	else
 	{
-		wait( ( int *) 0);
+		wait( ( int *) 0);//waits for child to finish
 		
 		
 	}

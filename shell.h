@@ -6,3 +6,5 @@
 #include <unistd.h>
 #include <sys/wait.h>
 void interactive();
+void batch();
+void execute(char *command);
