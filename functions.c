@@ -6,9 +6,11 @@ void interactive()
 	char *semicolon = NULL;//strtok var
 	int exitstatus = 1;//checks if the user has told the program to exit
 	read = malloc(sizeof(char)*100);
+	int counter;
 
 	while(exitstatus)
 	{
+		
 		printf("prompt> ");
 		fgets(read,100,stdin);//reads commands
 
@@ -24,9 +26,19 @@ void interactive()
 			else
 			{	
 				execute(semicolon);//give the command and flags to the execute command
+				counter++;
+				printf("\n");
 			}
 			semicolon = strtok(NULL,"[; ]\n");
+			
 		}
+		
+		while(counter)
+		{
+			wait(NULL);
+			counter--;
+		}
+		//wait( ( int *) 0);//waits for child to finish
 	}
 	free(semicolon);
     free(read);
@@ -70,7 +82,7 @@ void execute(char *command)
 	char *flags[100];//
 	char *split = NULL;//strtok var
 	int last;//holds the last arg position
-	printf("\nExecuting %s \n", command);
+	//printf("\nExecuting %s \n", command);
 
 
 	if(fork() == 0)//creates a child process
@@ -92,8 +104,6 @@ void execute(char *command)
 	}
 	else
 	{
-		wait( ( int *) 0);//waits for child to finish
-
 
 	}
 	return;
