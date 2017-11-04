@@ -2,27 +2,34 @@
 //Runs the shell in interactive mode.
 void interactive()
 {
-	char *read; // string from input
-	char *semicolon;//strtok var
+	char *read = NULL; // string from input
+	char *semicolon = NULL;//strtok var
+	int exitstatus = 1;//checks if the user has told the program to exit
+	read = malloc(sizeof(char)*100);
 
-	while(1)
+	while(exitstatus)
 	{
 		printf("prompt> ");
 		fgets(read,100,stdin);//reads commands
 
-		/*semicolon = strtok(read,"[;]\n");//checks for semicolons within each line read from the file
+		semicolon = strtok(read,"[;]\n");//checks for semicolons within each line read from the file
 
 		while (semicolon != NULL)//while there are semicolons in the string left
 		{
-			if(strcmp(semicolon,"exit"))//if the command is 'exit'
+			if(!strcmp(semicolon,"exit"))//if the command is 'exit'
 			{
 				exitstatus = 0;//tells program to exit after the current line
+				
 			}
-			execute(semicolon);//give the command and flags to the execute command
+			else
+			{	
+				execute(semicolon);//give the command and flags to the execute command
+			}
 			semicolon = strtok(NULL,"[; ]\n");
-		}*/
-		break;
+		}
 	}
+	free(semicolon);
+    free(read);
 	return;
 }
 //Runs the shell in Batch mode
