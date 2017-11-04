@@ -1,0 +1,4 @@
+ls -a
+date; cal
+ls | wc -l
+
