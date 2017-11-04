@@ -1,32 +1,30 @@
 #include "shell.h"
-
-int main(int argc, char *argv[])
+int main()
 {
 	int input;// for mode selection
-	int j;
-	char *filename;
+	int status = 1;//while loop status
+	
 
-	while(1)//run until a mode is called
+	while(status)//run until a mode is called
 	{
-		if(argc == 1)//run in interactive mode
+		printf("Press 1 for interactive mode or 2 for batch mode: ");
+		scanf("%d", &input);
+		if(input == 1)//run in interactive mode
 		{
 			interactive();
-			break;
+			status = 0;
 		}
-		else if(argc >= 2)//run in batch mode
+		else if(input == 2)//run in batch mode
 		{
-			for(j=1; j <= argc; j++)
-			{
-				filename = argv[j];
-				batch(filename);
-			}
-			break;
+			batch();
+			status = 0;
+			
 		}
 		else//input check
 		{
 			printf ("Invalid input \n");
-			break;
 		}
 	}
+	printf("\n Program exiting.\n");
 	return 0;
 }

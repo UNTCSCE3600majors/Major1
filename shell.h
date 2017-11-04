@@ -6,5 +6,5 @@
 #include <unistd.h>
 #include <sys/wait.h>
 void interactive();
-void batch(char *filename);
+void batch();
 void execute(char *command);
