@@ -30,5 +30,5 @@ All commands are called in as strings, and tokenized and broken up into pieces i
 is the ' ' whitespace, however special delimiters like ':', '<', '>', and '>>' are accounted for, though they exist as part of the array.
 
 known Bugs/ Problems:
-Currently, our code is insufficient at utilizing pipelining, and there is a bug in the redirection that prevents it from actually redirecting the files
-in or out. 
+Currently, our code is insufficient at utilizing pipelining. There is a bug in the redirection, that when using input and output redirectors
+at the same time, while it does open and read from the input file, and write to the output file, the output file does not have all of the proper data upon inspection.
