@@ -10,10 +10,12 @@ The project was initially divided into the four parts: Dan responsible for part 
 However, we realized that some parts were much simpler than others, and ended up changing our methods to tackle the easiest portions first,
 instead of just leaving each part to one person. We adapted to quickly complete the first part, with Dan being the one completeing the most
 of it, with some small corrections by the remainder of the group later on. This followed for part 2, which was for the most part straightforward
-to implement, however when attempting to tackle parts 3 and 4 in pairs, we ran into difficulties.
+to implement, and lead by Jared, however when attempting to tackle parts 3 and 4 in pairs, we ran into difficulties. The final two portions
+were definitely a team effort, and required multiple hours of dedication by all involved to try and complete properly. Readme file created by
+Logan, Makefile initially created by Dan.
 
 Design Overview:
-The code is divided up into 3 major secotions, the shell.h, which contains the function declarations and other header material; shell.c,
+The code is divided up into 3 major sections, the shell.h, which contains the function declarations and other header material; shell.c,
 which is where the 'main' is held, and largely only exists to determine if the program should run in batch mode or interactive mode,
 based on the user's initial input.
 Functions.c is where the bulk of the code exists. In particular, the execute function handles almost all of the work, such as piping, redirected input,
