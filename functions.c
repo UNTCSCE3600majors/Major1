@@ -97,7 +97,7 @@ void execute(char *command)
 	char *split = NULL;//strtok var
 	char *redirect = NULL;//strtok var
 	char *append = NULL;
-	char *temp = NULL;
+	char *temp = NULL, *temp2 = NULL;
 	int fd[2];
 	int stdin_cpy;
 	int stdout_cpy;
@@ -111,8 +111,34 @@ void execute(char *command)
 	
 	if(fork() == 0)//creates a child process
 	{
-		
-		if(redirect = strchr(command,'<')) // checks for input operator
+		if((redirect = strchr(command, '<')) && (redirect = strchr(command, '>')))
+		{
+			temp = strchr(redirect,'<');
+			while (strlen(temp) < 2)
+			{
+				temp = strtok(redirect," <");
+			}
+			fd[0] = open(temp,O_RDONLY);//opens the inputfile
+			temp2 = strchr(redirect,'>');
+			while (strlen(temp2) < 2)
+			{
+				temp2 = strtok(redirect," >");
+			}
+			fd[1] = open(temp2, O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);//opens the outputfile
+			//printf("Opened filename %s \n",temp);
+			dup2(fd[0],0);//makes stdin read from the file
+			dup2(fd[1],1);//makes stdin write to the file
+			close(fd[0]);
+			close(fd[1]);
+	
+			redirect = strtok(command, "<");
+			//printf("%s\n", redirect);
+			execute(redirect);
+			dup2(stdin_cpy,0);
+			dup2(stdout_cpy,1);
+			exit(getpid());
+		}
+		else if(redirect = strchr(command,'<')) // checks for input operator
 		{
 			temp = strtok(redirect," <");
 			while (strlen(temp) < 2)
@@ -131,14 +157,40 @@ void execute(char *command)
 			exit(getpid());
 			
 		}
+		/*else if (redirect = strtok(command,">>")) // searches for append operator
+		{
+			temp = strtok(redirect, ">>");
+			while(strlen(temp) < 2)
+			{
+					temp = strtok(NULL, ">>");
+			}
+			fd[1] = open(temp, O_WRONLY | O_APPEND | O_TRUNC, S_IRUSR | S_IWUSR); //opens and sets append
+			dup2(fd[1], 1);
+			close(fd[1]);
+			
+			redirect = strtok(command, ">>");
+			execute(redirect);
+			dup2(stdout_cpy, 1);
+			exit(getpid());
+		}*/ 
 		else if(redirect = strchr(command,'>')) // checks for output operator
 		{
-		
+			temp = strtok(redirect," >");
+			while (strlen(temp) < 2)
+			{
+				temp = strtok(NULL," >");
+			}
+			fd[1] = open(temp, O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);//opens the outputfile
+			//printf("Opened filename %s \n",temp);
+			dup2(fd[1],1);//makes stdin read from the file
+			close(fd[1]);
+	
+			redirect = strtok(command, ">");
+			//printf("%s\n", redirect);
+			execute(redirect);
+			dup2(stdout_cpy,1);
+			exit(getpid());
 		}
-		/*else if (redirect = strchr(command,append)) // searches for append operator
-		{
-			
-		}*/
 		else
 		{
 			split = strtok(command, " "); // searches the commands for flags
