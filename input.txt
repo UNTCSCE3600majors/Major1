@@ -1,3 +1,6 @@
-ls -a
-date; cal
-ls | wc -l
+the number
+of lines
+in this
+file
+is
+a lot

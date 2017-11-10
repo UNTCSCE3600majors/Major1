@@ -6,11 +6,14 @@ void interactive()
 	char *semicolon = NULL;//strtok var
 	int exitstatus = 1;//checks if the user has told the program to exit
 	read = malloc(sizeof(char)*100);
-	int counter;
-
+	int counter = 0;
+	int stdin_cpy;
+	int stdout_cpy;
+	
+	dup2(0,stdin_cpy);
+	dup2(1,stdout_cpy);
 	while(exitstatus)
 	{
-		
 		printf("prompt> ");
 		fgets(read,100,stdin);//reads commands
 
@@ -23,22 +26,25 @@ void interactive()
 				exitstatus = 0;//tells program to exit after the current line
 				
 			}
+	
 			else
-			{	
+			{
 				execute(semicolon);//give the command and flags to the execute command
+				dup2(stdin_cpy,0);
+				dup2(stdout_cpy,1);
 				counter++;
-				printf("\n");
 			}
 			semicolon = strtok(NULL,"[; ]\n");
 			
 		}
-		
-		while(counter)
+
+		while(counter)//waits for all children in the line to terminate
 		{
 			wait(NULL);
 			counter--;
 		}
-		//wait( ( int *) 0);//waits for child to finish
+		
+    
 	}
 	free(semicolon);
     free(read);
@@ -50,7 +56,11 @@ void batch(char *filename)
 	FILE *fstream; // opens a file pointer for handling input from files
 	char *read;//temporary read in variable
 	char *semicolon;//used to store seperate commands
-
+	int stdin_cpy;
+	int stdout_cpy;
+	
+	dup2(0,stdin_cpy);
+	dup2(1,stdout_cpy);
 	read = malloc(sizeof(char)*100);
 
 	fstream = fopen(filename, "r"); // opens the batch file in read mode
@@ -67,6 +77,8 @@ void batch(char *filename)
 		while (semicolon != NULL)//while there are semicolons in the string left
 		{
 			execute(semicolon);//give the command and flags to the execute command
+			dup2(stdin_cpy,0);
+			dup2(stdout_cpy,1);
 			semicolon = strtok(NULL,"[; ]\n");
 		}
 
@@ -78,33 +90,83 @@ void batch(char *filename)
 void execute(char *command)
 {
 
+	char newDirectory[255];
+	getcwd(newDirectory, 255);
 	int counter = 0;//checks the number of args passed to the function
 	char *flags[100];//
 	char *split = NULL;//strtok var
+	char *redirect = NULL;//strtok var
+	char *append = NULL;
+	char *temp = NULL;
+	int fd[2];
+	int stdin_cpy;
+	int stdout_cpy;
 	int last;//holds the last arg position
-	//printf("\nExecuting %s \n", command);
+	
+	dup2(0,stdin_cpy);
+	dup2(1,stdout_cpy);
+	//strcpy(append,"<<");
 
-
+	printf("\nExecuting %s \n", command);
+	
 	if(fork() == 0)//creates a child process
 	{
-
-		split = strtok(command, " "); // searches the commands for flags
-		while (split != NULL)
+		
+		if(redirect = strchr(command,'<')) // checks for input operator
 		{
-			flags[counter]= split;
-			counter++;
-			split = strtok(NULL, " ");//checks for remaining spaces.
-
+			temp = strtok(redirect," <");
+			while (strlen(temp) < 2)
+			{
+				temp = strtok(NULL," <");
+			}
+			fd[0] = open(temp,O_RDONLY);//opens the inputfile
+			//printf("Opened filename %s \n",temp);
+			dup2(fd[0],0);//makes stdin read from the file
+			close(fd[0]);
+	
+			redirect = strtok(command, "<");
+			//printf("%s\n", redirect);
+			execute(redirect);
+			dup2(stdin_cpy,0);
+			exit(getpid());
+			
 		}
-		last = counter++;
-		flags[last] = NULL; //sets null terminating character
-		execvp(flags[0], flags);//calls the command
-		printf("EXECVP failed\n");//if the process could not be called, terminate child
-		exit(getpid());
-	}
-	else
-	{
+		else if(redirect = strchr(command,'>')) // checks for output operator
+		{
+		
+		}
+		/*else if (redirect = strchr(command,append)) // searches for append operator
+		{
+			
+		}*/
+		else
+		{
+			split = strtok(command, " "); // searches the commands for flags
+			while (split != NULL)
+			{
+				flags[counter]= split;
+				counter++;
+				split = strtok(NULL, " ");//checks for remaining spaces.
 
+			}
+			if(strcmp(flags[0],"cd") == 0)
+			{
+				chdir(flags[1]);
+				return;
+			}
+
+			last = counter++;
+			flags[last] = NULL; //sets null terminating character
+			execvp(flags[0], flags);//calls the command
+			printf("EXECVP failed\n");//if the process could not be called, terminate child
+			exit(getpid());//terminate the process if it failed
+			free(flags);
+			free(split);
+			free(redirect);
+			//dup2(stdin_cpy,0);
+		
+		}
+		
 	}
 	return;
 }
