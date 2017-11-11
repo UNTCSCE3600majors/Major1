@@ -11,6 +11,7 @@ int main(int argc, char *argv[])
 		if(argc == 1)//run in interactive mode
 		{
 			interactive();
+	
 			break;
 		}
 		else if(argc >= 2)//run in batch mode

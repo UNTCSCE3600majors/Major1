@@ -1,0 +1,16 @@
+6
+Fri Nov 10 21:38:39 CST 2017
+total 64
+-rw------- 1 das0365 das0365    58 Nov 10 21:38 >>
+-rw-rw---- 1 das0365 das0365  5758 Nov 10 21:38 functions.c
+-rw-rw---- 1 das0365 das0365    28 Nov 10 14:02 input2.txt
+-rw-rw---- 1 das0365 das0365    42 Nov 10 14:53 input.txt
+-rw-rw---- 1 das0365 das0365   321 Nov 10 14:02 Makefile
+-rwx------ 1 das0365 das0365 15988 Nov 10 21:38 newshell
+-rw------- 1 das0365 das0365    29 Nov 10 21:36  output.txt
+-rw------- 1 das0365 das0365    31 Nov 10 21:38 output.txt
+-rw-rw---- 1 das0365 das0365   306 Nov 10 14:02 practice.c
+-rw-rw---- 1 das0365 das0365    22 Nov 10 14:02 README
+-rw-rw---- 1 das0365 das0365   526 Nov 10 14:02 shell.c
+-rw-rw---- 1 das0365 das0365   268 Nov 10 14:53 shell.h
+6
