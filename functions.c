@@ -7,41 +7,25 @@ void interactive()
 	int exitstatus = 1;//checks if the user has told the program to exit
 	read = malloc(sizeof(char)*100);
 
-
-	while(exitstatus)
+	while(1)
 	{
 		printf("prompt> ");
 		fgets(read,100,stdin);//reads commands
 
-		semicolon = strtok(read,"[;|]\n");//checks for semicolons within each line read from the file
+		semicolon = strtok(read,"[;]\n");//checks for semicolons within each line read from the file
 
-	int counter;
 		while (semicolon != NULL)//while there are semicolons in the string left
 		{
 			if(!strcmp(semicolon,"exit"))//if the command is 'exit'
 			{
 				exitstatus = 0;//tells program to exit after the current line
-				
 			}
-	
-			else
-			{
-				execute(semicolon);//give the command and flags to the execute command
-			}
+			execute(semicolon);//give the command and flags to the execute command
 			semicolon = strtok(NULL,"[; ]\n");
-			
 		}
-
-		while(counter)
-		{
-			wait(NULL);
-			counter--;
-		}
-		//wait( ( int *) 0);//waits for child to finish
-    
 	}
 	free(semicolon);
-    free(read);
+        free(read);
 	return;
 }
 //Runs the shell in Batch mode
@@ -78,17 +62,11 @@ void batch(char *filename)
 void execute(char *command)
 {
 
-	char newDirectory[255];
-	getcwd(newDirectory, 255);
 	int counter = 0;//checks the number of args passed to the function
 	char *flags[100];//
 	char *split = NULL;//strtok var
 	int last;//holds the last arg position
-
 	printf("\nExecuting %s \n", command);
-
-	//printf("\nExecuting %s \n", command);
-
 
 
 	if(fork() == 0)//creates a child process
@@ -102,15 +80,6 @@ void execute(char *command)
 			split = strtok(NULL, " ");//checks for remaining spaces.
 
 		}
-		if(strcmp(flags[0],"cd") == 0)
-		{
-			chdir(flags[1]);
-			return;
-		}
-
-
-		}
-
 		last = counter++;
 		flags[last] = NULL; //sets null terminating character
 		execvp(flags[0], flags);//calls the command
@@ -119,8 +88,8 @@ void execute(char *command)
 	}
 	else
 	{
-
 		wait( ( int *) 0);//waits for child to finish
+
 
 	}
 	return;
