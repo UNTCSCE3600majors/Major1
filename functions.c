@@ -105,22 +105,24 @@ void execute(char *command)
 			{
 				//tries to remove
 				strcat(getenv("PATH"), ":");
+				//adds user input
 				strcat(getenv("PATH"), flags[2]);
 				setenv("PATH", getenv("PATH"), 1);
+				//displays the updated pathname
 				printf("Directory: %s\n", getenv("PATH"));
 				exit(getpid());
 			}
 			//if path -
 			else if(strcmp(flags[1], "-") == 0)
 			{
-				//Tries to remove the path
+				//removes the path from the Pathname
 				string = strstr(getenv("PATH"), flags[2]);
-				string--;
-				strncpy(string, "", 1);
+				string--;//checks for any null and subs by 1
+				strncpy(string, "", 1);//replaces the found user input
 				setenv("PATH", getenv("PATH"), 1);
-				//Displays the new directory
+				//Displays the updated pathname
 				printf("Directory: %s\n", getenv("PATH"));
-				exit(getpid());
+				exit(getpid());//kills it
 			}
 			//if unknown
 			else
