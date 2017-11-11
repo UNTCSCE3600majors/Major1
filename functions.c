@@ -118,7 +118,7 @@ void execute(char *command)
 				string--;
 				strncpy(string, "", 1);
 				setenv("PATH", getenv("PATH"), 1);
-				//tries to diplay what I want
+				//Displays the new directory
 				printf("Directory: %s\n", getenv("PATH"));
 				exit(getpid());
 			}
