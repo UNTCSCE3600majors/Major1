@@ -1,2 +1,34 @@
 README FILE
-fix later
+Names: 
+Dan Shadel
+Jared Westmoreland
+Eli Cruse
+Logan Falkensten
+
+Organization of Project: 
+The project was initially divided into the four parts: Dan responsible for part 1, Jared for part 2, Logan for part 3, and Eli for part 4.
+However, we realized that some parts were much simpler than others, and ended up changing our methods to tackle the easiest portions first,
+instead of just leaving each part to one person. We adapted to quickly complete the first part, with Dan being the one completeing the most
+of it, with some small corrections by the remainder of the group later on. The next three portions proved a bit more problematic, and likely we
+made it somewhat too complicated for ourselves, but we worked through most issues that we had with the programming. The final two portions
+were definitely a team effort, and required multiple hours of dedication by all involved to try and complete properly. Part three was worked on by
+Logan and Dan. Part 4 was worked on by Eli, Jared, and Dan. Readme file created by Logan, Makefile initially created by Dan.
+
+Design Overview:
+The code is divided up into 3 major sections, the shell.h, which contains the function declarations and other header material; shell.c,
+which is where the 'main' is held, and largely only exists to determine if the program should run in batch mode or interactive mode,
+based on the user's initial input.
+Functions.c is where the bulk of the code exists. In particular, the execute function handles almost all of the work, such as piping, redirected input,
+and essentially executing any command the user throws at it within definition of the design requirements. It is designed to handle both redirected 
+promts, and standard commands.
+The 'checknumofoperators' command is used purely for determining the number of redirections in a user input.
+the 'interactive' and 'batch' functions are self explainatory, execution upon the user's initial input as running in batch mode, or interactive mode. 
+
+Complete Specification: 
+Our code sees the whitespace in between semicolons as an empty token, nothing will happen.
+All commands are called in as strings, and tokenized and broken up into pieces in an array, sequentially getting executed. Standard delimiter
+is the ' ' whitespace, however special delimiters like ':', '<', '>', and '>>' are accounted for, though they exist as part of the array.
+
+known Bugs/ Problems:
+Currently, our code is insufficient at utilizing pipelining. While it will work with some commands, two commands at once seems to be the
+given max before things tend to fail to work properly. In part 2, the path command does not seem to give the expected output, but it does not break the program. 
