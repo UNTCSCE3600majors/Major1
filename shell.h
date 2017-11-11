@@ -1,3 +1,4 @@
+#include <sys/stat.h>
 #include <stdio.h>
 #include <pthread.h> //for threading
 #include <stdlib.h>

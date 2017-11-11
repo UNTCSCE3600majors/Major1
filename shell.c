@@ -27,6 +27,7 @@ int main(int argc, char *argv[])
 			printf ("Invalid input \n");
 			break;
 		}
+		printf("Exiting program\n");
 	}
 	return 0;
 }
