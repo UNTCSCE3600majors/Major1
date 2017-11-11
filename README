@@ -31,4 +31,4 @@ is the ' ' whitespace, however special delimiters like ':', '<', '>', and '>>' a
 
 known Bugs/ Problems:
 Currently, our code is insufficient at utilizing pipelining. While it will work with some commands, two commands at once seems to be the
-given max befor things tend to fail to work properly. In part 2, the path command does not seem to give the expected output, but it does not break the program. 
+given max before things tend to fail to work properly. In part 2, the path command does not seem to give the expected output, but it does not break the program. 
