@@ -9,10 +9,10 @@ Organization of Project:
 The project was initially divided into the four parts: Dan responsible for part 1, Jared for part 2, Logan for part 3, and Eli for part 4.
 However, we realized that some parts were much simpler than others, and ended up changing our methods to tackle the easiest portions first,
 instead of just leaving each part to one person. We adapted to quickly complete the first part, with Dan being the one completeing the most
-of it, with some small corrections by the remainder of the group later on. This followed for part 2, which was for the most part straightforward
-to implement, and lead by Jared, however when attempting to tackle parts 3 and 4 in pairs, we ran into difficulties. The final two portions
-were definitely a team effort, and required multiple hours of dedication by all involved to try and complete properly. Readme file created by
-Logan, Makefile initially created by Dan.
+of it, with some small corrections by the remainder of the group later on. The next thre portions proved a bit more probolematic, and likely we
+made it somewhat too complicated for ourselves, but we worked through most issues that we had with the programming. The final two portions
+were definitely a team effort, and required multiple hours of dedication by all involved to try and complete properly. Part three was worked on by
+Logan and Dan. Part 4 was worked on by Eli, Jared, and Dan. Readme file created by Logan, Makefile initially created by Dan.
 
 Design Overview:
 The code is divided up into 3 major sections, the shell.h, which contains the function declarations and other header material; shell.c,
@@ -30,5 +30,5 @@ All commands are called in as strings, and tokenized and broken up into pieces i
 is the ' ' whitespace, however special delimiters like ':', '<', '>', and '>>' are accounted for, though they exist as part of the array.
 
 known Bugs/ Problems:
-Currently, our code is insufficient at utilizing pipelining. There is a bug in the redirection, that when using input and output redirectors
-at the same time, while it does open and read from the input file, and write to the output file, the output file does not have all of the proper data upon inspection.
+Currently, our code is insufficient at utilizing pipelining. While it will work with some commands, two commands at once seems to be the
+given max befor things tend to fail to work properly. In part 2, the path command does not seem to give the expected output, but it does not break the program. 
