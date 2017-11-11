@@ -10,8 +10,8 @@ void interactive()
 	int stdin_cpy;
 	int stdout_cpy;
 	
-	dup2(0,stdin_cpy);
-	dup2(1,stdout_cpy);
+	dup2(0,stdin_cpy); //creates a copy of standard in
+	dup2(1,stdout_cpy); //creates a copy of standard out
 	while(exitstatus)
 	{
 		printf("prompt> ");
@@ -103,23 +103,23 @@ void execute(char *command)
 	int stdout_cpy;
 	int last;//holds the last arg position
 	
-	dup2(0,stdin_cpy);
-	dup2(1,stdout_cpy);
-	//strcpy(append,"<<");
+	dup2(0,stdin_cpy); //creates a copy of standard in
+	dup2(1,stdout_cpy); //creates a copy of standard out
+	//strcpy(append,"<<"); //attempted to string copy the append string to a variable
 
 	printf("\nExecuting %s \n", command);
 	
 	if(fork() == 0)//creates a child process
 	{
-		if((redirect = strchr(command, '<')) && (redirect = strchr(command, '>')))
+		if((redirect = strchr(command, '<')) && (redirect = strchr(command, '>'))) //this runs for if there is an input and and output redirect
 		{
-			temp = strchr(redirect,'<');
+			temp = strchr(redirect,'<'); //tokenizes up to the input operator
 			while (strlen(temp) < 2)
 			{
 				temp = strtok(redirect," <");
 			}
 			fd[0] = open(temp,O_RDONLY);//opens the inputfile
-			temp2 = strchr(redirect,'>');
+			temp2 = strchr(redirect,'>'); //tokenizes up to the output operator
 			while (strlen(temp2) < 2)
 			{
 				temp2 = strtok(redirect," >");
@@ -128,14 +128,14 @@ void execute(char *command)
 			//printf("Opened filename %s \n",temp);
 			dup2(fd[0],0);//makes stdin read from the file
 			dup2(fd[1],1);//makes stdin write to the file
-			close(fd[0]);
-			close(fd[1]);
+			close(fd[0]); //closes redirected in
+			close(fd[1]); //closes redirected out
 	
 			redirect = strtok(command, "<");
 			//printf("%s\n", redirect);
 			execute(redirect);
-			dup2(stdin_cpy,0);
-			dup2(stdout_cpy,1);
+			dup2(stdin_cpy,0); //reopens standard in
+			dup2(stdout_cpy,1); //reopens standard out
 			exit(getpid());
 		}
 		else if(redirect = strchr(command,'<')) // checks for input operator
@@ -152,9 +152,9 @@ void execute(char *command)
 	
 			redirect = strtok(command, "<");
 			//printf("%s\n", redirect);
-			execute(redirect);
-			dup2(stdin_cpy,0);
-			exit(getpid());
+			execute(redirect); //executes command, recursive until there is only commands left to execute, no delimiters
+			dup2(stdin_cpy,0); //reopen's standard input
+			exit(getpid()); //kills process
 			
 		}
 		/*else if (redirect = strtok(command,">>")) // searches for append operator
@@ -175,21 +175,21 @@ void execute(char *command)
 		}*/ 
 		else if(redirect = strchr(command,'>')) // checks for output operator
 		{
-			temp = strtok(redirect," >");
+			temp = strtok(redirect," >"); //tokenizes up to the output operator
 			while (strlen(temp) < 2)
 			{
-				temp = strtok(NULL," >");
+				temp = strtok(NULL," >"); //
 			}
-			fd[1] = open(temp, O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);//opens the outputfile
+			fd[1] = open(temp, O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);//opens the outputfile, ro create a new one
 			//printf("Opened filename %s \n",temp);
-			dup2(fd[1],1);//makes stdin read from the file
-			close(fd[1]);
+			dup2(fd[1],1);//makes stdout write from the file
+			close(fd[1]); //closes fd after use
 	
 			redirect = strtok(command, ">");
 			//printf("%s\n", redirect);
 			execute(redirect);
-			dup2(stdout_cpy,1);
-			exit(getpid());
+			dup2(stdout_cpy,1); //returns standard out back to normal
+			exit(getpid()); //exits process
 		}
 		else
 		{
