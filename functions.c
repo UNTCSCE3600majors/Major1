@@ -100,6 +100,7 @@ void execute(char *command)
 	char *temp2 = NULL;
 	char *pipeline = NULL;
 	char *cmdcpy;
+	char *string;
 	int fd[2];
 	int i;
 	int cmdctr = 0;
@@ -109,6 +110,7 @@ void execute(char *command)
 	int stdout_cpy;
 	int last;//holds the last arg position
 	int check1 = 0;
+	
 	
 	cmdcpy = malloc(sizeof(char) * strlen(command));
 	
@@ -219,11 +221,60 @@ void execute(char *command)
 			counter++;
 			split = strtok(NULL, " ");//checks for remaining spaces.
 		}
+		
+		
+		
+		
+		
 		if(strcmp(flags[0],"cd") == 0)
 		{
+			//executes cd input
 			chdir(flags[1]);
 			return;
 		}
+		else if(strcmp(flags[0],"path") == 0)
+        {
+			//if only path
+			if(counter == 1)
+			{
+				//displays environmental variable PATH
+				printf("Directory: %s\n", getenv("PATH"));
+				exit(getpid());
+			}
+			//if path +
+			else if(strcmp(flags[1], "+") == 0)
+			{
+				//tries to remove
+				strcat(getenv("PATH"), ":");
+				//adds user input
+				strcat(getenv("PATH"), flags[2]);
+				setenv("PATH", getenv("PATH"), 1);
+				//displays the updated pathname
+				printf("Directory: %s\n", getenv("PATH"));
+				exit(getpid());
+			}
+			//if path -
+			else if(strcmp(flags[1], "-") == 0)
+			{
+				//removes the path from the Pathname
+				string = strstr(getenv("PATH"), flags[2]);
+				string--;//checks for any null and subs by 1
+				strncpy(string, "", 1);//replaces the found user input
+				setenv("PATH", getenv("PATH"), 1);
+				//Displays the updated pathname
+				printf("Directory: %s\n", getenv("PATH"));
+				exit(getpid());//kills it
+			}
+			//if unknown
+			else
+			{
+				printf("Unknown Argument\n");
+				return;
+			}
+		}
+		
+		
+		
 		last = counter++;
 		flags[last] = NULL; //sets null terminating character
 		execvp(flags[0], flags);//calls the command
